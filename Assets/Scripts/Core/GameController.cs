@@ -9,14 +9,20 @@ public class GameController : MonoBehaviour
 
     public UIController uiController;
 
-    private DatabaseOutcomeEngine outcomeEngine;
+    private IOutcomeEngine activeEngine;
+
     private int playerBalance = 100;
     private bool isSpinning = false;
 
     void Start()
     {
-        outcomeEngine = new DatabaseOutcomeEngine();
         uiController.UpdateBalance(playerBalance);
+    }
+
+    public void SetEngine(IOutcomeEngine engine)
+    {
+        activeEngine = engine;
+        uiController.UpdateRulePreview(activeEngine.GetRules());
     }
 
     public void OnSpinButtonPressed()
@@ -24,30 +30,59 @@ public class GameController : MonoBehaviour
         if (isSpinning)
             return;
 
-        if (playerBalance <= 0)
+        if (playerBalance < 10)
+            return;
+
+        if (activeEngine == null)
             return;
 
         StartCoroutine(SpinRoutine());
     }
 
     private IEnumerator SpinRoutine()
-    {
-        isSpinning = true;
+{
+    isSpinning = true;
 
-        playerBalance -= 10;
-        uiController.UpdateBalance(playerBalance);
+    int balanceBeforeBet = playerBalance;
 
-        SpinResult result = outcomeEngine.GenerateResult();
+    playerBalance -= 10;
+    uiController.UpdateBalance(playerBalance);
 
-        yield return StartCoroutine(reel1.Spin());
-        yield return StartCoroutine(reel2.Spin());
-        yield return StartCoroutine(reel3.Spin());
+    Debug.Log(
+        "[SPIN START] Engine: " + activeEngine.GetEngineName() +
+        " | Balance Before Bet: " + balanceBeforeBet +
+        " | Balance After Bet: " + playerBalance
+    );
 
-        playerBalance += result.payout;
+    SpinResult result = activeEngine.GenerateResult();
 
-        uiController.UpdateBalance(playerBalance);
-        uiController.ShowResult(result);
+    Debug.Log(
+        "[OUTCOME GENERATED] Engine: " + activeEngine.GetEngineName() +
+        " | Result: " + result.type +
+        " | Payout: " + result.payout
+    );
 
-        isSpinning = false;
-    }
+    yield return StartCoroutine(reel1.Spin());
+    yield return StartCoroutine(reel2.Spin());
+    yield return StartCoroutine(reel3.Spin());
+
+    int balanceBeforePayout = playerBalance;
+
+    playerBalance += result.payout;
+
+    Debug.Log(
+        "[PAYOUT APPLIED] Engine: " + activeEngine.GetEngineName() +
+        " | Balance Before Payout: " + balanceBeforePayout +
+        " | Balance After Payout: " + playerBalance
+    );
+
+    uiController.UpdateBalance(playerBalance);
+    uiController.ShowResult(result);
+
+    isSpinning = false;
+
+    Debug.Log(
+        "[SPIN END] Engine: " + activeEngine.GetEngineName()
+    );
+}
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-public class DatabaseOutcomeEngine
+public class DatabaseOutcomeEngine : IOutcomeEngine
 {
     private List<SpinResult> scriptedResults;
     private int currentIndex = 0;
@@ -28,5 +28,20 @@ public class DatabaseOutcomeEngine
         currentIndex++;
 
         return result;
+    }
+
+    public List<string> GetRules()
+    {
+        return new List<string>
+        {
+            "Scripted sequence",
+            "Loop when finished",
+            "No randomness"
+        };
+    }
+
+    public string GetEngineName()
+    {
+        return "Database Outcome";
     }
 }

@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class UIController : MonoBehaviour
 {
     public TMP_Text balanceText;
     public TMP_Text resultText;
+    public TMP_Dropdown rulePreviewDropdown;
 
     public void UpdateBalance(int balance)
     {
@@ -27,5 +29,12 @@ public class UIController : MonoBehaviour
                 resultText.text = "JACKPOT +" + result.payout;
                 break;
         }
+    }
+
+    public void UpdateRulePreview(List<string> rules)
+    {
+        rulePreviewDropdown.ClearOptions();
+        rulePreviewDropdown.AddOptions(rules);
+        rulePreviewDropdown.RefreshShownValue();
     }
 }
