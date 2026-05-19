@@ -39,6 +39,17 @@ public class GameController : MonoBehaviour
         StartCoroutine(SpinRoutine());
     }
 
+    public string GetCurrentEngineName()
+{
+    if (activeEngine == null)
+        return "None";
+
+    return activeEngine.GetEngineName();
+}
+
+
+
+
     private IEnumerator SpinRoutine()
 {
     isSpinning = true;

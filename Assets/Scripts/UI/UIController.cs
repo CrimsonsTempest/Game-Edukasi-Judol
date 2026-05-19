@@ -37,4 +37,9 @@ public class UIController : MonoBehaviour
         rulePreviewDropdown.AddOptions(rules);
         rulePreviewDropdown.RefreshShownValue();
     }
+
+    public void SetRuleDropdownInteractable(bool value)
+{
+    rulePreviewDropdown.interactable = value;
+}
 }
