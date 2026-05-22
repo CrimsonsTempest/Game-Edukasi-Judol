@@ -13,6 +13,10 @@ public class GameController : MonoBehaviour
 
     private int playerBalance = 100;
     private bool isSpinning = false;
+    
+    // Profit tracking variables
+    private int totalBetsPlaced = 0;
+    private int totalPayoutsGiven = 0;
 
     void Start()
     {
@@ -57,6 +61,7 @@ public class GameController : MonoBehaviour
     int balanceBeforeBet = playerBalance;
 
     playerBalance -= 10;
+    totalBetsPlaced += 10;
     uiController.UpdateBalance(playerBalance);
 
     Debug.Log(
@@ -80,6 +85,7 @@ public class GameController : MonoBehaviour
     int balanceBeforePayout = playerBalance;
 
     playerBalance += result.payout;
+    totalPayoutsGiven += result.payout;
 
     Debug.Log(
         "[PAYOUT APPLIED] Engine: " + activeEngine.GetEngineName() +
@@ -94,6 +100,16 @@ public class GameController : MonoBehaviour
 
     Debug.Log(
         "[SPIN END] Engine: " + activeEngine.GetEngineName()
+    );
+
+    int houseProfit = totalBetsPlaced - totalPayoutsGiven;
+    int playerProfit = totalPayoutsGiven - totalBetsPlaced;
+
+    Debug.Log(
+        "[PROFIT TRACKING] Engine: " + activeEngine.GetEngineName() +
+        " | Total House Profit: " + houseProfit +
+        " | Total Player Profit: " + playerProfit +
+        " (Total Bets: " + totalBetsPlaced + ", Total Payouts: " + totalPayoutsGiven + ")"
     );
 }
 }
