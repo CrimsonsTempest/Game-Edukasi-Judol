@@ -300,20 +300,21 @@ Karena behavior berubah berdasarkan engine aktif, AI agent yang melanjutkan proj
 
 # Reel System
 
-Current reel implementation masih placeholder.
+Reel implementation saat ini sudah mensimulasikan pergerakan slot kasino.
 
 Saat ini reel:
-- hanya rotate visual
-- belum memakai symbol strip asli
-- belum sinkron dengan simbol kemenangan
+- Mensimulasikan *rolling image* vertikal menggunakan *auto-spawned* `SpriteRenderer`.
+- Tersinkronisasi dengan outcome dari engine (Engine menentukan target kombinasi -> reel berputar paralel -> reel berhenti berurutan dengan jeda 300ms dan snap pada target simbol).
+- Menggunakan `SymbolDatabase` (ScriptableObject) secara terpusat untuk menyimpan set gambar simbol (modular).
 
-Hal ini disengaja untuk memprioritaskan engine architecture terlebih dahulu.
+Jika ukuran simbol terlalu besar atau kecil, dan jika putaran terlalu lambat atau cepat:
+- Anda dapat mengubah nilai `symbolScale` dan `spinSpeed` di *Inspector* komponen `ReelController` pada tiap GameObject Reel.
+- Jarak antar simbol juga dapat diatur menggunakan properti `symbolSpacing`.
 
 Planned future upgrade:
-- symbol strip
-- weighted symbol
-- fake reel stop
-- controlled symbol mapping
+- weighted symbol configuration pada engine
+- fake reel stop / antisipasi putaran panjang
+- animasi pantulan (bounce) saat berhenti
 
 ---
 
@@ -743,3 +744,15 @@ Namun untuk current scale:
 - complexity belum cukup tinggi untuk ECS/event-bus architecture
 
 Premature overengineering sebaiknya dihindari.
+
+---
+
+# Additional Review Pass 8
+
+## Reset State Implementation
+Sebuah metode `OnResetButtonPressed()` telah ditambahkan pada `GameController.cs`.
+Metode ini menggunakan `SceneManager.LoadScene` untuk memuat ulang *scene* saat ini, yang merupakan cara paling efektif untuk me-reset "semua state" pada project Unity (mengembalikan saldo *balance* ke awal, mengosongkan riwayat profit, serta me-reset *internal logic* seperti engine state dan RTP stats).
+
+## Editor Helper: Auto-Disable Main SpriteRenderer
+Karena `ReelController` sekarang melakukan *auto-spawn* untuk *child GameObjects* yang menampilkan `SpriteRenderer` (sebagai efek *rolling image* vertikal), komponen `SpriteRenderer` utama pada *GameObject* Reel (misal Reel1, Reel2, Reel3) kini **otomatis dimatikan (disabled) saat game berjalan**. 
+Hal ini dilakukan agar komponen utama tersebut bisa tetap digunakan murni sebagai referensi ukuran (*sizing reference*) di dalam Editor saat mendesain UI/layout, tanpa mengganggu visual game saat dimainkan (karena tidak akan dirender).
