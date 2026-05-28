@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
     public ReelController reel1;
     public ReelController reel2;
     public ReelController reel3;
+    
 
     public UIController uiController;
 
@@ -22,6 +23,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         uiController.UpdateBalance(playerBalance);
+        AudioManager.instance.PlayMusic(AudioManager.instance.song1);
     }
 
     public void SetEngine(IOutcomeEngine engine)
@@ -54,13 +56,12 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public string GetCurrentEngineName()
-{
+    public string GetCurrentEngineName(){
     if (activeEngine == null)
         return "None";
 
     return activeEngine.GetEngineName();
-}
+    }
 
     private int[] GenerateTargetSymbols(SpinType type, int totalSymbols)
     {
@@ -110,8 +111,8 @@ public class GameController : MonoBehaviour
         return targets;
     }
 
-    private IEnumerator SpinRoutine()
-{
+    private IEnumerator SpinRoutine(){
+
     isSpinning = true;
 
     int balanceBeforeBet = playerBalance;
@@ -127,6 +128,9 @@ public class GameController : MonoBehaviour
     );
 
     SpinResult result = activeEngine.GenerateResult();
+
+
+    StartCoroutine(playSFX(result.type));
 
     Debug.Log(
         "[OUTCOME GENERATED] Engine: " + activeEngine.GetEngineName() +
@@ -196,4 +200,17 @@ public class GameController : MonoBehaviour
         " (Total Bets: " + totalBetsPlaced + ", Total Payouts: " + totalPayoutsGiven + ")"
     );
 }
+
+IEnumerator playSFX (SpinType type){
+    AudioManager.instance.PlaySFX(AudioManager.instance.Rolls);
+    yield return new WaitForSeconds(1.5f);
+    switch (type){
+        case SpinType.Jackpot: AudioManager.instance.PlaySFX(AudioManager.instance.MaxWin); break;
+        case SpinType.SmallWin: AudioManager.instance.PlaySFX(AudioManager.instance.SmallWin); break;
+
+        default:; break;
+    }
+}
+
+
 }
