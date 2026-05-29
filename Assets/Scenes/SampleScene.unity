@@ -3350,7 +3350,7 @@ MonoBehaviour:
   sfxSource: {fileID: 622884266}
   song1: {fileID: 8300000, guid: c20993ce6cbc9dd4c8fede5a5a6d3b86, type: 3}
   MaxWin: {fileID: 8300000, guid: e6d0d61353517bb4aa69e5705fe59624, type: 3}
-  Rolls: {fileID: 8300000, guid: 85d1dd16904609f4797b503e277c4084, type: 3}
+  Rolls: {fileID: 8300000, guid: a58fca215eb02a240a5ea63c37e2b5ab, type: 3}
   SmallWin: {fileID: 8300000, guid: 267a0289752fde046bdf11fb4079e2fe, type: 3}
 --- !u!4 &1447366899
 Transform:
