@@ -10,7 +10,7 @@ public class UIController : MonoBehaviour
 
     public void UpdateBalance(int balance)
     {
-        balanceText.text = "Balance: " + balance;
+        balanceText.text = "" + balance;
     }
 
     public void ShowResult(SpinResult result)
