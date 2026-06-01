@@ -35,8 +35,8 @@ public class PatternOutcomeEngine : IOutcomeEngine
     {
         return new List<string>
         {
-            "Every 10 spins = Small Win",
-            "5 losses = Recovery Win",
+            "Every 10 spins = Small Win "+
+            "5 losses = Recovery Win "+
             "Every 25 spins = Jackpot"
         };
     }

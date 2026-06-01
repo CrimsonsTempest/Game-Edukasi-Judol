@@ -27,6 +27,7 @@ public class MechanismSelector : MonoBehaviour
                 gameController.SetEngine(new DatabaseOutcomeEngine());
 
                 rulePreviewDropdown.interactable = false;
+                Debug.Log("Mechanism Changed to DatabaseOutcome");
 
                 break;
 
@@ -34,6 +35,7 @@ public class MechanismSelector : MonoBehaviour
                 gameController.SetEngine(new PatternOutcomeEngine());
 
                 rulePreviewDropdown.interactable = false;
+                Debug.Log("Mechanism Changed to PatternOutcome");
 
                 break;
 
@@ -43,15 +45,17 @@ public class MechanismSelector : MonoBehaviour
                 gameController.SetEngine(rtpEngine);
 
                 rulePreviewDropdown.interactable = true;
+                Debug.Log("Mechanism Changed to RTPControlEngine");
 
                 break;
 
             case 3:
-                stateEngine = new StateMachineEngine(GameState.Normal);
+                stateEngine = new StateMachineEngine(GameState.Cold);
 
                 gameController.SetEngine(stateEngine);
 
                 rulePreviewDropdown.interactable = true;
+                Debug.Log("Mechanism Changed to  StateMachineEngine");
 
                 break;
         }

@@ -58,9 +58,7 @@ public class DatabaseOutcomeEngine : IOutcomeEngine
     {
         return new List<string>
         {
-            "Scripted sequence",
-            "Loop when finished",
-            "No randomness"
+            "Scripted sequence, Loop when finished,No randomness"
         };
     }
 
