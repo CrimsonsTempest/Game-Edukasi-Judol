@@ -756,3 +756,17 @@ Metode ini menggunakan `SceneManager.LoadScene` untuk memuat ulang *scene* saat 
 ## Editor Helper: Auto-Disable Main SpriteRenderer
 Karena `ReelController` sekarang melakukan *auto-spawn* untuk *child GameObjects* yang menampilkan `SpriteRenderer` (sebagai efek *rolling image* vertikal), komponen `SpriteRenderer` utama pada *GameObject* Reel (misal Reel1, Reel2, Reel3) kini **otomatis dimatikan (disabled) saat game berjalan**. 
 Hal ini dilakukan agar komponen utama tersebut bisa tetap digunakan murni sebagai referensi ukuran (*sizing reference*) di dalam Editor saat mendesain UI/layout, tanpa mengganggu visual game saat dimainkan (karena tidak akan dirender).
+
+---
+
+# Additional Review Pass 9
+
+## Migrasi Reel ke UI (Canvas)
+Sistem ReelController kini telah dimigrasi secara penuh dari sistem World Space (menggunakan `SpriteRenderer` dan `Transform`) menjadi UI Space (menggunakan `Image` dan `RectTransform`). Hal ini dilakukan untuk mendukung kemudahan **scaling** di berbagai resolusi layar menggunakan `Canvas Scaler`, mempermudah **Masking** (menggunakan `RectMask2D`), serta menyatukan perenderan reel dengan keseluruhan elemen UI lainnya.
+
+Beberapa perubahan penting akibat migrasi ini:
+- Komponen `SpriteRenderer` telah digantikan oleh UI `Image`.
+- Posisi pergerakan reel kini memodifikasi `anchoredPosition` dari `RectTransform` (berbasis piksel) menggantikan koordinat World.
+- Variabel `spinSpeed` dan `symbolSpacing` kini menggunakan skala ukuran piksel UI yang lebih besar (misal: kecepatan 1000f, spasi 150f).
+- Dalam Unity Editor, GameObject Reel sekarang **wajib diletakkan di dalam hierarki Canvas**.
+- GameObject Reel utama disarankan menggunakan mask (contoh: RectMask2D) untuk menutupi gulungan simbol yang ada di luar area tampilan.

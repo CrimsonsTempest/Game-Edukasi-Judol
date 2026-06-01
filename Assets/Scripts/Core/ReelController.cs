@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class ReelController : MonoBehaviour
@@ -7,39 +8,42 @@ public class ReelController : MonoBehaviour
     public SymbolDatabase symbolDatabase;
     public Sprite[] symbols => symbolDatabase != null ? symbolDatabase.symbols : null;
 
-    public float spinSpeed = 25f; // Units per second
-    public float symbolSpacing = 2.5f;
+    public float spinSpeed = 1000f; // Pixels per second untuk UI
+    public float symbolSpacing = 150f; // Jarak antar simbol dalam piksel UI
     public float symbolScale = 1.0f; // Scale multiplier for the symbol sprites
     
-    private SpriteRenderer[] symbolRenderers;
+    private Image[] symbolImages;
     private bool spinning = false;
     private int visibleSymbolsCount = 5; // Enough to wrap smoothly without popping
 
     void Start()
     {
-        // Matikan SpriteRenderer utama karena hanya digunakan untuk referensi ukuran di Editor
-        SpriteRenderer mainSr = GetComponent<SpriteRenderer>();
-        if (mainSr != null)
+        // Matikan Image utama karena hanya digunakan untuk referensi background/masking di Editor
+        Image mainImg = GetComponent<Image>();
+        if (mainImg != null)
         {
-            mainSr.enabled = false;
+            mainImg.enabled = false;
         }
 
         // Auto-spawn child GameObjects for the symbols
-        symbolRenderers = new SpriteRenderer[visibleSymbolsCount];
+        symbolImages = new Image[visibleSymbolsCount];
 
-        for (int i = 0; i < symbolRenderers.Length; i++)
+        for (int i = 0; i < symbolImages.Length; i++)
         {
             GameObject symbolObj = new GameObject("Symbol_" + i);
-            symbolObj.transform.SetParent(this.transform);
+            symbolObj.transform.SetParent(this.transform, false);
             symbolObj.transform.localScale = new Vector3(symbolScale, symbolScale, symbolScale);
             
+            RectTransform rt = symbolObj.AddComponent<RectTransform>();
             // Initial positioning: index 1 is roughly center (Y = 0)
-            symbolObj.transform.localPosition = new Vector3(0, (i - 1) * symbolSpacing, 0);
+            rt.anchoredPosition = new Vector2(0, (i - 1) * symbolSpacing);
+            rt.sizeDelta = new Vector2(100, 100); // Default base size for symbol rects
             
-            SpriteRenderer sr = symbolObj.AddComponent<SpriteRenderer>();
-            sr.sprite = (symbols != null && symbols.Length > 0) ? symbols[Random.Range(0, symbols.Length)] : null;
+            Image img = symbolObj.AddComponent<Image>();
+            img.sprite = (symbols != null && symbols.Length > 0) ? symbols[Random.Range(0, symbols.Length)] : null;
+            img.preserveAspect = true; // Penting untuk UI agar rasio sprite tetap terjaga
             
-            symbolRenderers[i] = sr;
+            symbolImages[i] = img;
         }
     }
 
@@ -55,21 +59,21 @@ public class ReelController : MonoBehaviour
         spinning = false;
         
         // Snap positions neatly
-        for (int i = 0; i < symbolRenderers.Length; i++)
+        for (int i = 0; i < symbolImages.Length; i++)
         {
-            symbolRenderers[i].transform.localPosition = new Vector3(0, (i - 1) * symbolSpacing, 0);
+            symbolImages[i].rectTransform.anchoredPosition = new Vector2(0, (i - 1) * symbolSpacing);
         }
 
         // The center symbol (index 1) is set to the target symbol
         if (symbols != null && symbols.Length > 0 && targetSymbolIndex >= 0 && targetSymbolIndex < symbols.Length)
         {
-            symbolRenderers[1].sprite = symbols[targetSymbolIndex];
+            symbolImages[1].sprite = symbols[targetSymbolIndex];
             
             // Randomize the other visible symbols
-            symbolRenderers[0].sprite = symbols[Random.Range(0, symbols.Length)];
-            symbolRenderers[2].sprite = symbols[Random.Range(0, symbols.Length)];
-            symbolRenderers[3].sprite = symbols[Random.Range(0, symbols.Length)];
-            symbolRenderers[4].sprite = symbols[Random.Range(0, symbols.Length)];
+            symbolImages[0].sprite = symbols[Random.Range(0, symbols.Length)];
+            symbolImages[2].sprite = symbols[Random.Range(0, symbols.Length)];
+            symbolImages[3].sprite = symbols[Random.Range(0, symbols.Length)];
+            symbolImages[4].sprite = symbols[Random.Range(0, symbols.Length)];
         }
 
         yield return null;
@@ -79,20 +83,20 @@ public class ReelController : MonoBehaviour
     {
         if (spinning)
         {
-            for (int i = 0; i < symbolRenderers.Length; i++)
+            for (int i = 0; i < symbolImages.Length; i++)
             {
-                Transform t = symbolRenderers[i].transform;
-                t.localPosition += Vector3.down * spinSpeed * Time.deltaTime;
+                RectTransform t = symbolImages[i].rectTransform;
+                t.anchoredPosition += Vector2.down * spinSpeed * Time.deltaTime;
 
                 // When a symbol goes off the bottom, wrap it around to the top
-                if (t.localPosition.y <= -2f * symbolSpacing)
+                if (t.anchoredPosition.y <= -2f * symbolSpacing)
                 {
-                    float topY = t.localPosition.y + (symbolRenderers.Length * symbolSpacing);
-                    t.localPosition = new Vector3(0, topY, 0);
+                    float topY = t.anchoredPosition.y + (symbolImages.Length * symbolSpacing);
+                    t.anchoredPosition = new Vector2(t.anchoredPosition.x, topY);
                     
                     if (symbols != null && symbols.Length > 0)
                     {
-                        symbolRenderers[i].sprite = symbols[Random.Range(0, symbols.Length)];
+                        symbolImages[i].sprite = symbols[Random.Range(0, symbols.Length)];
                     }
                 }
             }
