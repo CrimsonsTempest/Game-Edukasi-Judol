@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Game-Edukasi-Judol.slnx",
+    "dotnet.defaultSolution": "Game Edukasi Judol.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
