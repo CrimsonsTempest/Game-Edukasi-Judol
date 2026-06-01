@@ -337,10 +337,10 @@ RectTransform:
   - {fileID: 1654516692}
   m_Father: {fileID: 2005574744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.85600007, y: 0.74500006}
-  m_AnchorMax: {x: 0.91600007, y: 0.8505186}
-  m_AnchoredPosition: {x: -0.21826172, y: 1}
-  m_SizeDelta: {x: 0.3265381, y: 1.6362305}
+  m_AnchorMin: {x: 0.85600007, y: 0.7868519}
+  m_AnchorMax: {x: 0.91600007, y: 0.89114815}
+  m_AnchoredPosition: {x: -0.16333, y: 2.5}
+  m_SizeDelta: {x: 0.3265381, y: 2.6362305}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &152913809
 MonoBehaviour:
@@ -2532,13 +2532,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Database Outcome:\nSetting default, jackpot setiap 100 rolls, mini win
-    setiap 10 rolls.\n\nReturn to Player:\nPresentase return yang didapat oleh pemain.\n\nState
-    Machine:\n- Cold: selalu kalah\n- Normal: 50 mini win/50 kalah\n- Hot mode: selalu
-    mini win \n- Bonus mode: selalu jackpot"
+  m_text: "\n\nDatabase Outcome:\nSetting default, jackpot setiap 100 rolls, mini
+    win setiap 10 rolls.\n\nReturn to Player:\nPresentase return yang didapat oleh
+    pemain.\n\nState Machine:\n- Cold: selalu kalah\n- Normal: 50 mini win/50 kalah\n-
+    Hot mode: selalu mini win \n- Bonus mode: selalu jackpot"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: efee054a341cfc5499b03f37b084a284, type: 2}
-  m_sharedMaterial: {fileID: -3349135639081873548, guid: efee054a341cfc5499b03f37b084a284, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4a86743593563e346a9d60dd721a0439, type: 2}
+  m_sharedMaterial: {fileID: -2290492958472484254, guid: 4a86743593563e346a9d60dd721a0439, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2756,7 +2756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1087461141
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2790,7 +2790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
